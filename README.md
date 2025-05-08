@@ -1,12 +1,6 @@
 ## 環境構築
 ### 1. 本リポジトリをcloneします。
-以下のコマンドでリポジトリをクローンします。
-```bash
-$ git clone git@github.com:runteq/v4_rails_advanced_2.git
-```
-```bash
-$ cd v4_rails_advanced_2
-```
+git cloneコマンドでcloneを行ってください
 
 ### 2. Dockerコンテナの起動
 以下のコマンドでDockerコンテナを起動します。
