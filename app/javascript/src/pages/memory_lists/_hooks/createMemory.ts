@@ -6,7 +6,7 @@ export const createMemory = async (data: Partial<MemoryFormData>) => {
   formData.append('memory[title]', data.title || '')
   formData.append('memory[body]', data.body || '')
   formData.append('memory[public_flag]', String(data.public_flag || false))
-  const file = data.image
+  const file = data.images?.[0]
   if (file) {
     const renamedFile = new File([file], 'upload.png', { type: file.type })
     formData.append('memory[image]', renamedFile)

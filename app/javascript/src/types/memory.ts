@@ -13,6 +13,6 @@ export type MemoryFormData = {
   title: string
   body: string
   public_flag: boolean
-  image?: File
+  images?: File[]
   image_url?: string
 }
