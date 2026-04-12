@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_22_050023) do
+ActiveRecord::Schema[7.2].define(version: 2026_04_12_025705) do
+  create_table "images", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "memory_id", null: false
+    t.string "image"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["memory_id"], name: "index_images_on_memory_id"
+  end
+
   create_table "memories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "title", null: false
@@ -30,5 +38,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_22_050023) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "images", "memories"
   add_foreign_key "memories", "users"
 end

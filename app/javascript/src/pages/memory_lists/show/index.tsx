@@ -6,6 +6,7 @@ import { useAuth } from '../../../hooks/use-auth'
 import MemoryDeleteButton from '../_components/memory-delete-button'
 import Spinner from '../../../components/layouts/ui/spinner'
 import { formatJapaneseDate } from '../../../utils/dateFormatter'
+import ImageGallery from '../../../components/layouts/ImageGallery'
 
 const MemoryShowPage = () => {
   const { id } = useParams<{ id: string }>()
@@ -75,11 +76,15 @@ const MemoryShowPage = () => {
           </p>
         )}
         <div>
-          <img
-            src={memory.image_url || '/assets/default.png'}
-            alt={memory.title}
-            className="mb-4 h-auto w-full rounded-lg"
-          />
+          {memory.image_urls && memory.image_urls.length > 0 ? (
+            <ImageGallery images={memory.image_urls} />
+          ) : (
+            <img
+              src="/assets/default.png"
+              alt={memory.title}
+              className="mb-4 h-auto w-full rounded-lg"
+            />
+          )}
         </div>
         <div>
           <p>作成者 : {memory.user_name}</p>

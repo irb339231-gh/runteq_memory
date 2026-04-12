@@ -2,7 +2,7 @@ class Api::V1::MemoriesController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    memories = Memory.public_memories.includes(:user)
+    memories = Memory.public_memories.includes(:user, :images)
     render json: memories.map { |memory|
       {
         id: memory.id,
@@ -10,7 +10,7 @@ class Api::V1::MemoriesController < ApplicationController
         body: memory.body,
         created_at: memory.created_at,
         user_name: memory.user.name,
-        image_url: memory.image.url
+        image_urls: memory.images.map { |img| img.image.url }  # 複数画像に変更
       }
     }, status: :ok
   end
@@ -29,7 +29,7 @@ class Api::V1::MemoriesController < ApplicationController
       public_flag: memory.public_flag,
       created_at: memory.created_at,
       user_name: memory.user.name,
-      image_url: memory.image.url,
+      image_urls: memory.images.map { |img| img.image.url },  # 複数画像に変更
       user_id: memory.user.id
     }, status: :ok
   end
@@ -37,6 +37,9 @@ class Api::V1::MemoriesController < ApplicationController
   def create
     memory = current_user.memories.new(memory_params)
     if memory.save
+      params[:images]&.each do |image|  # 複数画像を保存
+        memory.images.create(image: image)
+      end
       render json: { message: "思い出が作成されました" }, status: :ok
     else
       render json: { error: memory.errors.full_messages }, status: :unprocessable_entity
@@ -51,6 +54,10 @@ class Api::V1::MemoriesController < ApplicationController
     end
 
     if memory.update(memory_params)
+      memory.images.destroy_all  # 既存画像を削除
+      params[:images]&.each do |image|  # 新しい画像を保存
+        memory.images.create(image: image)
+      end
       render json: { message: "思い出が更新されました" }, status: :ok
     else
       render json: { error: memory.errors.full_messages }, status: :unprocessable_entity
@@ -75,6 +82,6 @@ class Api::V1::MemoriesController < ApplicationController
   private
 
   def memory_params
-    params.require(:memory).permit(:title, :body, :public_flag, :image)
+    params.require(:memory).permit(:title, :body, :public_flag)  # imageは削除
   end
 end

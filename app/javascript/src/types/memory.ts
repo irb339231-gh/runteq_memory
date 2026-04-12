@@ -1,3 +1,5 @@
+// app/javascript/src/types/memory.ts
+
 export type Memory = {
   id: number
   title: string
@@ -5,7 +7,7 @@ export type Memory = {
   public_flag: boolean
   created_at: string
   user_name: string
-  image_url?: string
+  image_urls?: string[]  // image_url → image_urls に変更
   user_id: number
 }
 
@@ -14,5 +16,5 @@ export type MemoryFormData = {
   body: string
   public_flag: boolean
   images?: File[]
-  image_url?: string
+  image_urls?: string[]  // image_url → image_urls に変更
 }
