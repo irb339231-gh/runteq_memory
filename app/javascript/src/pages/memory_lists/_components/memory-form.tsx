@@ -3,6 +3,7 @@ import { MemoryFormData } from '../../../types/memory'
 
 type MemoryFormProps = {
   formData: Partial<MemoryFormData>
+  previews: string[]
   onChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => void
@@ -14,6 +15,7 @@ type MemoryFormProps = {
 
 export default function MemoryForm({
   formData,
+  previews = [],
   onChange,
   onSubmit,
   onFileChange,
@@ -81,24 +83,24 @@ export default function MemoryForm({
           htmlFor="image"
           className="mb-2 block font-semibold text-gray-700"
         >
-          画像
+          画像（複数可）：
         </label>
-        {(formData.image || formData.image_url) && (
-          <img
-            src={
-              formData.image
-                ? URL.createObjectURL(formData.image)
-                : formData.image_url!
-            }
-            alt="Preview"
-            className="mb-4 h-32 w-32 object-cover"
-          />
-        )}
+        <div className="mb-4 flex flex-wrap gap-3">
+          {previews.map((src, index) => (
+            <img
+              key={index}
+              src={src}
+              alt={`preview-${index}`}
+              className="h-24 w-24 rounded object-cover"
+            />
+          ))}
+        </div>
         <input
           id="image"
           type="file"
           name="image"
           accept="image/*"
+          multiple
           onChange={onFileChange}
           className="w-full rounded-md border border-gray-300 p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
         />

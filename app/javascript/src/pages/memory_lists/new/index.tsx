@@ -10,6 +10,7 @@ const MemoryCreatePage = () => {
     body: '',
     public_flag: false,
   })
+  const [previews, setPreviews] = useState<string[]>([])
   const [error, setError] = useState('')
   const navigate = useNavigate()
 
@@ -24,13 +25,16 @@ const MemoryCreatePage = () => {
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
+    const files = Array.from(e.target.files ?? [])
+    if (files.length === 0) return
+
       setFormData({
         ...formData,
-        image: file,
+        images: files,
       })
-    }
+
+    const newPreviews = files.map((file) => URL.createObjectURL(file))
+    setPreviews(newPreviews)
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -52,6 +56,7 @@ const MemoryCreatePage = () => {
       <h1 className="text-3xl font-bold">新規思い出作成</h1>
       <MemoryForm
         formData={formData}
+        previews={previews}
         onChange={handleChange}
         onSubmit={handleSubmit}
         onFileChange={handleFileChange}
